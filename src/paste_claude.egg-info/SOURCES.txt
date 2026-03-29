@@ -1,0 +1,9 @@
+pyproject.toml
+src/paste_claude/__init__.py
+src/paste_claude/__main__.py
+src/paste_claude.egg-info/PKG-INFO
+src/paste_claude.egg-info/SOURCES.txt
+src/paste_claude.egg-info/dependency_links.txt
+src/paste_claude.egg-info/entry_points.txt
+src/paste_claude.egg-info/requires.txt
+src/paste_claude.egg-info/top_level.txt

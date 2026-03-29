@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: paste-claude
+Version: 0.1.0
+Summary: Grab clipboard images and output file paths for Claude Code CLI
+Requires-Python: >=3.9
+Requires-Dist: Pillow>=9.0.0

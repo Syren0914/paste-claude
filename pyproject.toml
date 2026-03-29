@@ -1,0 +1,16 @@
+[project]
+name = "paste-claude"
+version = "0.1.0"
+description = "Grab clipboard images and output file paths for Claude Code CLI"
+requires-python = ">=3.9"
+dependencies = ["Pillow>=9.0.0"]
+
+[project.scripts]
+paste-claude = "paste_claude.__main__:main"
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
