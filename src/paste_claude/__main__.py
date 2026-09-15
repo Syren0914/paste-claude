@@ -1,3 +1,4 @@
+import argparse
 import ctypes
 import datetime
 import os
@@ -38,9 +39,11 @@ def clipboard_has_image_only():
     )
 
 
-def process_clipboard():
-    """Save clipboard image to a temp PNG file and add the file path as text
-    to the clipboard while keeping the original image data intact."""
+def process_clipboard(copy_path=False):
+    """Save an image, optionally adding its path to the clipboard for CLI use.
+
+    By default leave all clipboard formats untouched so web apps paste images.
+    """
     img = ImageGrab.grabclipboard()
     if img is None:
         return None
@@ -53,6 +56,9 @@ def process_clipboard():
     short_id = uuid.uuid4().hex[:6]
     filepath = os.path.join(temp_dir, f"clipboard_{timestamp}_{short_id}.png")
     img.save(filepath, "PNG")
+
+    if not copy_path:
+        return filepath
 
     # Read the raw DIB data so we can re-set it alongside the text
     if not user32.OpenClipboard(0):
@@ -94,16 +100,28 @@ def process_clipboard():
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Save clipboard images as PNG files.")
+    parser.add_argument(
+        "--copy-path", action="store_true",
+        help="Add the PNG path as clipboard text for CLI use (web apps may paste the path).",
+    )
+    args = parser.parse_args()
     print("paste-claude: watching clipboard for images...")
-    print("Copy a screenshot or image — the file path will be added automatically.")
+    if args.copy_path:
+        print("CLI mode: image file paths will be added to the clipboard.")
+    else:
+        print("Web mode: images stay on the clipboard; saved paths are printed here.")
     print("Press Ctrl+C to stop.\n")
 
+    last_sequence = None
     while True:
         try:
-            if clipboard_has_image_only():
-                filepath = process_clipboard()
+            sequence = user32.GetClipboardSequenceNumber()
+            if sequence != last_sequence and clipboard_has_image_only():
+                filepath = process_clipboard(copy_path=args.copy_path)
                 if filepath:
                     print(f"Saved: {filepath}")
+                last_sequence = sequence
             time.sleep(0.5)
         except KeyboardInterrupt:
             print("\nStopped.")
