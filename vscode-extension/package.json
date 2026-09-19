@@ -1,0 +1,21 @@
+{
+  "name": "paste-claude-native-images",
+  "displayName": "Paste Claude: Terminal Screenshots",
+  "description": "Paste screenshots into Claude and Codex in integrated Windows terminals without changing the clipboard.",
+  "version": "0.3.0",
+  "publisher": "paste-claude-local",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "main": "./extension.js",
+  "extensionKind": ["ui"],
+  "activationEvents": ["onStartupFinished"],
+  "capabilities": { "untrustedWorkspaces": { "supported": true } },
+  "contributes": {
+    "commands": [{ "command": "pasteClaude.attachScreenshot", "title": "Attach Screenshot or Paste Clipboard into Terminal" }],
+    "keybindings": [
+      { "key": "ctrl+v", "command": "pasteClaude.attachScreenshot", "when": "terminalFocus && isWindows" },
+      { "key": "ctrl+shift+v", "command": "pasteClaude.attachScreenshot", "when": "terminalFocus && isWindows" },
+      { "key": "shift+insert", "command": "pasteClaude.attachScreenshot", "when": "terminalFocus && isWindows" }
+    ]
+  }
+}
